@@ -27,17 +27,18 @@ mainframe.rowconfigure(5, weight=1)
 
 def cookingamount(*args):    
     try:
-        amount = float(vegetable.get())
+        amount = int(vegetable.get())
         totalBeers = amount / 5
         waters = totalBeers * 6
         leaveling = totalBeers * 2
         sugar = totalBeers
         print(totalBeers)
         #Set Text on GUI
-        #waterLabel.set(waters)
-        #leavelingLabel.set(leaveling)
-        #sugarLabel.set(sugar)
-        #beersLabel(totalBeers)
+        waterLabel.set(waters)
+        leavelingLabel.set(leaveling)
+        sugarLabel.set(sugar)
+        beersLabel.set(totalBeers)
+        finalCountLabel.set('Total Beers:')
     except ValueError:
         errorCode.set('Not a valid Number')
         pass
@@ -48,7 +49,8 @@ def reset():
     waterLabel.set('')
     leavelingLabel.set('')
     sugarLabel.set('')
-    beersLabel('')
+    beersLabel.set('')
+    finalCountLabel.set('')
 
 #Set Ingredients
 vegetable = StringVar()
@@ -57,6 +59,7 @@ leavelingLabel = StringVar()
 sugarLabel = StringVar()
 beersLabel = StringVar()
 errorCode = StringVar()
+finalCountLabel = StringVar()
 #Intro and Logo
 logo = PhotoImage(file='bdo.png')
 ttk.Label(logoFrame, image=logo).grid(column=3)
@@ -66,10 +69,15 @@ vegetable_entry = ttk.Entry(mainframe, width=15, textvariable=vegetable)
 vegetable_entry.grid(column=1, row=1, sticky=W)
 ttk.Label(mainframe, text='Amount of Vegetables:').grid(column=0, row=1, sticky=W)
 #Basic Text Setup
-ttk.Label(mainframe, text='Water:').grid(sticky=E)
-ttk.Label(mainframe, text='Leaveling:').grid(sticky=E)
-ttk.Label(mainframe, text='Sugar:').grid(sticky=E)
-ttk.Label(mainframe, text='Total Beers:').grid(sticky=E)
+ttk.Label(mainframe, text='Water:').grid(column=0, row=2, sticky=E)
+ttk.Label(mainframe, text='Leaveling:').grid(column=0, row=3, sticky=E)
+ttk.Label(mainframe, text='Sugar:').grid(column=0, row=4, sticky=E)
+ttk.Label(mainframe, textvariable=finalCountLabel, foreground="green").grid(column=0, row=5, sticky=E)
+#result Text Lavels
+ttk.Label(mainframe, textvariable=waterLabel).grid(column=1, row=2, sticky=W)
+ttk.Label(mainframe, textvariable=leavelingLabel).grid(column=1, row=3, sticky=W)
+ttk.Label(mainframe, textvariable=sugarLabel).grid(column=1, row=4, sticky=W)
+ttk.Label(mainframe, textvariable=beersLabel, foreground="green").grid(column=1, row=5, sticky=W)
 #Error Handleing
 ttk.Label(mainframe, textvariable=errorCode, foreground="red").grid(column=1, sticky=E)
 
@@ -79,6 +87,12 @@ calculateButton.grid(column=1,row=8, sticky=W)
 #Reset Button
 resetButton = ttk.Button(mainframe, text="Reset", command=reset)
 resetButton.grid(column=2, row=8, sticky=E)
+
+#Make the cursor start at the entry field
+vegetable_entry.focus()
+
+#Return key calculates the amount   
+window.bind('<Return>', cookingamount)
 
 for child in mainframe.winfo_children(): 
      child.grid_configure(padx=5, pady=5)
